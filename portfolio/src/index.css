@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* CSS variables for smooth theme transitions */
+:root {
+  --bg: 255 255 255;
+  --fg: 23 23 23;
+  --muted: 107 114 128;
+  --brand: 14 165 233; /* sky-500 */
+}
+
+.dark {
+  --bg: 15 23 42; /* slate-900 */
+  --fg: 241 245 249; /* slate-100 */
+  --muted: 148 163 184; /* slate-400 */
+  --brand: 99 102 241; /* indigo-500 */
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply antialiased transition-colors duration-500 ease-out;
+  background-color: rgb(var(--bg));
+  color: rgb(var(--fg));
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(90deg, rgb(14 165 233), rgb(99 102 241));
+}
+
+.container-responsive {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.card-hover {
+  @apply transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl;
+}
+
+.btn-primary {
+  @apply inline-flex items-center gap-2 rounded-xl bg-sky-500 text-white px-4 py-2 font-semibold shadow-sm hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 dark:focus:ring-offset-slate-900;
+}
+
+.btn-outline {
+  @apply inline-flex items-center gap-2 rounded-xl border border-slate-300 dark:border-slate-600 px-4 py-2 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800;
+}
