@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Typewriter } from 'react-simple-typewriter'
-import { motion } from 'framer-motion'
-import { Github, Linkedin, Mail, Moon, Sun, GraduationCap, Briefcase, BookOpen, Code2 } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Github, Linkedin, Mail, Moon, Sun, GraduationCap, Briefcase, BookOpen, Code2, Menu, X } from 'lucide-react'
 import { FaBootstrap, FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaPython } from 'react-icons/fa'
-import { SiTailwindcss, SiMongodb, SiNextdotjs, SiExpress, SiTypescript, SiVite } from 'react-icons/si'
+import { SiTailwindcss, SiMongodb, SiNextdotjs, SiExpress, SiTypescript, SiVite, SiFlask, SiOracle, SiCplusplus, SiDotnet } from 'react-icons/si'
 import { useInView } from 'react-intersection-observer'
 import './index.css'
 
@@ -16,6 +16,8 @@ const PROFILE = {
   github: 'https://github.com/SyedHassanShah',
   linkedin: 'https://linkedin.com/in/syed-hassan-shah-a33512b5',
 }
+
+const NAME_PARTS = ['SYED', 'HASSAN', 'HUSSAIN', 'SHAH'] as const
 
 const SKILL_ROTATION = [
   'C++',
@@ -64,6 +66,22 @@ const PROJECTS = [
     image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop',
     link: PROFILE.github,
   },
+  {
+    title: 'Portfolio v2',
+    stack: ['React', 'Tailwind CSS', 'Framer Motion', 'Vite'],
+    description:
+      'A polished personal portfolio with animated hero, glass navbar, and scroll‑triggered reveals.',
+    image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1200&auto=format&fit=crop',
+    link: PROFILE.github,
+  },
+  {
+    title: 'E‑Commerce Storefront',
+    stack: ['Next.js', 'TypeScript', 'Stripe', 'Tailwind CSS'],
+    description:
+      'Responsive storefront with product filtering, cart/checkout, and Stripe payments.',
+    image: 'https://images.unsplash.com/photo-1543363136-67f52ae95f39?q=80&w=1200&auto=format&fit=crop',
+    link: PROFILE.github,
+  },
 ]
 
 const EDUCATION = [
@@ -92,6 +110,10 @@ const SKILLS = [
   { name: 'Bootstrap', icon: <FaBootstrap className="text-purple-600" />, level: 85 },
   { name: 'Python', icon: <FaPython className="text-yellow-500" />, level: 65 },
   { name: 'Vite', icon: <SiVite className="text-purple-500" />, level: 80 },
+  { name: 'C++', icon: <SiCplusplus className="text-blue-600" />, level: 70 },
+  { name: 'C#', icon: <SiDotnet className="text-purple-700" />, level: 65 },
+  { name: 'Oracle', icon: <SiOracle className="text-red-600" />, level: 55 },
+  { name: 'Flask', icon: <SiFlask />, level: 60 },
 ]
 
 function useTheme(): [string, () => void] {
@@ -137,8 +159,21 @@ function useReveal() {
 
 export default function App() {
   const [theme, toggleTheme] = useTheme()
+  const [navOpen, setNavOpen] = useState(false)
+  const [nameIndex, setNameIndex] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setNameIndex((i) => (i + 1) % NAME_PARTS.length)
+    }, 1400)
+    return () => clearInterval(id)
+  }, [])
 
   const { ref: heroRef, variants: heroVariants, inView: heroInView } = useReveal()
+  const { ref: projectsRef, variants: projectsVariants, inView: projectsInView } = useReveal()
+  const { ref: eduRef, variants: eduVariants, inView: eduInView } = useReveal()
+  const { ref: skillsRef, variants: skillsVariants, inView: skillsInView } = useReveal()
+  const { ref: contactRef, variants: contactVariants, inView: contactInView } = useReveal()
 
   return (
     <div className="min-h-screen bg-[rgb(var(--bg))] text-[rgb(var(--fg))]">
@@ -166,8 +201,28 @@ export default function App() {
             <button onClick={toggleTheme} className="btn-outline" aria-label="Toggle theme">
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
+            <button className="md:hidden btn-outline" aria-label="Menu" onClick={() => setNavOpen((o) => !o)}>
+              {navOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
           </div>
         </div>
+        <AnimatePresence>
+          {navOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="md:hidden border-t border-slate-200 dark:border-slate-800"
+            >
+              <div className="container-responsive py-3 grid grid-cols-2 gap-3 text-sm font-semibold">
+                <a href="#projects" onClick={() => setNavOpen(false)} className="btn-outline">Projects</a>
+                <a href="#education" onClick={() => setNavOpen(false)} className="btn-outline">Education</a>
+                <a href="#skills" onClick={() => setNavOpen(false)} className="btn-outline">Skills</a>
+                <a href="#contact" onClick={() => setNavOpen(false)} className="btn-outline">Contact</a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Hero */}
@@ -187,8 +242,25 @@ export default function App() {
             <h1 className="text-4xl sm:text-5xl font-black leading-tight">
               Hi, I’m <span className="gradient-text">{PROFILE.name}</span>
             </h1>
+            <div className="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1">
+              <span className="text-xs font-bold tracking-widest text-slate-600 dark:text-slate-300 me-2">NAME</span>
+              <div className="relative h-6 w-28 overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={nameIndex}
+                    initial={{ y: 16, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -16, opacity: 0 }}
+                    transition={{ duration: 0.35 }}
+                    className="absolute inset-0 flex items-center font-extrabold text-sky-600 dark:text-indigo-400"
+                  >
+                    {NAME_PARTS[nameIndex]}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+            </div>
             <p className="text-lg text-slate-600 dark:text-slate-300">
-              Building responsive, scalable, and secure apps from design to deployment. I love crafting delightful UX with robust APIs and modern tooling.
+              I craft clean, modern UIs with solid architecture — from beautiful HTML/CSS to interactive React frontends and robust Node/Flask backends.
             </p>
             <p className="text-base text-slate-500 dark:text-slate-400">
               I work with{' '}
@@ -208,14 +280,29 @@ export default function App() {
             </div>
           </div>
           <div className="order-1 lg:order-2">
-            <div className="relative mx-auto h-60 w-60 sm:h-72 sm:w-72 lg:h-80 lg:w-80 rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-slate-200/70 dark:ring-slate-700">
-              {/* Placeholder for profile image; user will replace src */}
-              <img
-                src="/profile.jpg"
-                alt="Profile"
-                className="h-full w-full object-cover"
-              />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-sky-500/20 to-indigo-500/10 mix-blend-overlay" />
+            <div className="relative mx-auto h-60 w-60 sm:h-72 sm:w-72 lg:h-80 lg:w-80">
+              <div className="absolute inset-0 -z-10 rounded-[2.4rem] blur-2xl bg-gradient-to-tr from-sky-400/30 to-indigo-400/20" />
+              <div className="p-[3px] rounded-[2.2rem] bg-gradient-to-tr from-sky-500 to-indigo-500">
+                <div className="relative rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-slate-200/70 dark:ring-slate-700 bg-white dark:bg-slate-900">
+                  {/* Placeholder for profile image; user will replace src */}
+                  <img
+                    src="/profile.jpg"
+                    alt="Profile"
+                    className="h-60 w-60 sm:h-72 sm:w-72 lg:h-80 lg:w-80 object-cover"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-sky-500/20 to-indigo-500/10 mix-blend-overlay" />
+                </div>
+              </div>
+              {/* Floating badges */}
+              <div className="absolute -top-3 -left-3 h-10 w-10 rounded-xl bg-white/80 dark:bg-slate-800/80 backdrop-blur border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-md">
+                <FaReact className="text-sky-500" />
+              </div>
+              <div className="absolute -bottom-3 -right-3 h-10 w-10 rounded-xl bg-white/80 dark:bg-slate-800/80 backdrop-blur border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-md">
+                <FaNodeJs className="text-green-600" />
+              </div>
+              <div className="absolute -top-3 -right-3 h-10 w-10 rounded-xl bg-white/80 dark:bg-slate-800/80 backdrop-blur border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-md">
+                <SiTailwindcss className="text-sky-400" />
+              </div>
             </div>
           </div>
         </motion.section>
@@ -223,7 +310,15 @@ export default function App() {
 
       {/* Projects */}
       <main className="space-y-24">
-        <section id="projects" className="container-responsive">
+        <motion.section
+          id="projects"
+          ref={projectsRef}
+          initial="hidden"
+          animate={projectsInView ? 'show' : 'hidden'}
+          variants={projectsVariants}
+          transition={{ duration: 0.5 }}
+          className="container-responsive"
+        >
           <SectionHeader
             icon={<Briefcase />}
             title="Projects"
@@ -259,27 +354,50 @@ export default function App() {
               </motion.article>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Education */}
-        <section id="education" className="container-responsive">
+        <motion.section
+          id="education"
+          ref={eduRef}
+          initial="hidden"
+          animate={eduInView ? 'show' : 'hidden'}
+          variants={eduVariants}
+          transition={{ duration: 0.5 }}
+          className="container-responsive"
+        >
           <SectionHeader icon={<GraduationCap />} title="Education" subtitle="Academic background" />
           <ol className="relative border-s border-slate-200 dark:border-slate-800">
             {EDUCATION.map((e, i) => (
-              <li key={i} className="ms-6 py-6">
+              <motion.li
+                key={i}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                className="ms-6 py-6"
+              >
                 <span className="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-sky-500 text-white ring-8 ring-white dark:ring-slate-900">
                   <BookOpen size={14} />
                 </span>
                 <h4 className="text-lg font-bold">{e.school}</h4>
                 <p className="text-slate-600 dark:text-slate-300">{e.degree}</p>
                 <p className="text-sm text-slate-500 dark:text-slate-400">{e.period}</p>
-              </li>
+              </motion.li>
             ))}
           </ol>
-        </section>
+        </motion.section>
 
         {/* Skills */}
-        <section id="skills" className="container-responsive">
+        <motion.section
+          id="skills"
+          ref={skillsRef}
+          initial="hidden"
+          animate={skillsInView ? 'show' : 'hidden'}
+          variants={skillsVariants}
+          transition={{ duration: 0.5 }}
+          className="container-responsive"
+        >
           <SectionHeader icon={<Code2 />} title="Skills" subtitle="Core technologies I use" />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
             {SKILLS.map((s) => (
@@ -294,10 +412,18 @@ export default function App() {
               </div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Contact */}
-        <section id="contact" className="container-responsive">
+        <motion.section
+          id="contact"
+          ref={contactRef}
+          initial="hidden"
+          animate={contactInView ? 'show' : 'hidden'}
+          variants={contactVariants}
+          transition={{ duration: 0.5 }}
+          className="container-responsive"
+        >
           <SectionHeader icon={<Mail />} title="Contact" subtitle="Let’s build something great together" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div className="space-y-4">
@@ -314,7 +440,7 @@ export default function App() {
             </div>
             <ContactForm />
           </div>
-        </section>
+        </motion.section>
       </main>
 
       {/* Footer */}

@@ -19,6 +19,10 @@ html, body, #root {
   height: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply antialiased transition-colors duration-500 ease-out;
   background-color: rgb(var(--bg));
@@ -45,4 +49,36 @@ body {
 
 .btn-outline {
   @apply inline-flex items-center gap-2 rounded-xl border border-slate-300 dark:border-slate-600 px-4 py-2 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800;
+}
+
+/* Animation utilities */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeUp {
+  animation: fadeUp 0.6s ease-out both;
+}
+
+/* Optional marquee utility for horizontal scrolling text */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee {
+  display: flex;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marquee 12s linear infinite;
 }
