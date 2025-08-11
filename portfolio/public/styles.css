@@ -1,0 +1,86 @@
+:root {
+  --brand-start: #22d3ee;
+  --brand-end: #f97316;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, var(--brand-start), var(--brand-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  backdrop-filter: blur(10px);
+}
+.dark .glass {
+  background: rgba(2, 6, 23, 0.5);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.nav-link-underline {
+  position: relative;
+}
+.nav-link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -6px;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg, var(--brand-start), var(--brand-end));
+  transition: width 300ms ease;
+}
+.nav-link-underline:hover::after,
+.nav-link-underline:focus::after {
+  width: 100%;
+}
+
+.profile-ring {
+  position: relative;
+}
+.profile-ring::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg, var(--brand-start), var(--brand-end), var(--brand-start));
+  filter: blur(6px);
+  opacity: 0.8;
+  animation: spinRing 10s linear infinite;
+}
+
+@keyframes spinRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.card-hover {
+  transition: transform 250ms ease, box-shadow 250ms ease;
+}
+.card-hover:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+}
+.dark .card-hover:hover {
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+}
+.btn-glow::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(90deg, var(--brand-start), var(--brand-end));
+  filter: blur(10px);
+  opacity: 0.6;
+  transition: opacity 200ms ease;
+}
+.btn-glow:hover::before { opacity: 0.9; }
+
+.section-title {
+  letter-spacing: 0.02em;
+}
